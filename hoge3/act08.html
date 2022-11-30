@@ -1,0 +1,205 @@
+
+
+
+<!DOCTYPE html>
+
+<html lang="jp">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MacユーザーのためのClamAV導入-8 &#8212; clamAV-for-mac 0.1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/cloud.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noticia+Text:400,i,b,bi|Open+Sans:400,i,b,bi|Roboto+Mono:400,i,b,bi&amp;display=swap" type="text/css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+
+    
+    
+     
+        <script src="../_static/jquery.cookie.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.base.js"></script>
+    
+
+    
+     
+        <script src="../_static/cloud.js"></script>
+    
+
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head><body>
+    <div class="relbar-top">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+    <li><a href="../index.html">clamAV-for-mac 0.1.0 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><strong>MacユーザーのためのClamAV導入-8</strong></a></li> 
+      </ul>
+    </div>
+    </div>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="macclamav-8">
+<h1><strong>MacユーザーのためのClamAV導入-8</strong><a class="headerlink" href="#macclamav-8" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line">このドキュメントもあくまで参考資料であり、興味がある人は</div>
+<div class="line">自分自身で手を動かし、書籍やWebで公開されている情報を</div>
+<div class="line">蒐集することを推奨するものとします。</div>
+</div>
+<p><em>８ー１．ClamAV本体をバイナリで入手する</em></p>
+<div class="line-block">
+<div class="line">直近の更新されているCheckをダウンロードし、解凍する。</div>
+<div class="line">　cd ~</div>
+<div class="line">　curl -LO <a class="reference external" href="https://www.clamav.net/downloads/production/clamav-1.0.0-rc2.tar.gz">https://www.clamav.net/downloads/production/clamav-1.0.0-rc2.tar.gz</a></div>
+<div class="line">　tar zxf clamav-1.0.0-rc2.tar.gz</div>
+</div>
+<p><em>８－２．CMakeのオプションとライブラリパスを設定し、生成・構成する</em></p>
+<div class="line-block">
+<div class="line">先の手順で解凍したフォルダに入り、自前で準備する。</div>
+<div class="line">　cd clamav-1.0.0-rc2</div>
+<div class="line">　mkdir build</div>
+<div class="line">　cd build</div>
+<div class="line">　cmake </div>
+<div class="line">　-D CMAKE_BUILD_TYPE=Release </div>
+<div class="line">　-D OPTIMIZE=ON </div>
+<div class="line">　-D BYTECODE_RUNTIME=&quot;interpreter&quot; </div>
+<div class="line">　-D CMAKE_INSTALL_PREFIX=/usr/local/clamXav/ </div>
+<div class="line">　-D ENABLE_JSON_SHARED=OFF </div>
+<div class="line">　-D ENABLE_TESTS=ON </div>
+<div class="line">　-D LIBCHECK_ROOT_DIR=/usr/local/check </div>
+<div class="line">　-D LIBCHECK_INCLUDE_DIR=/usr/local/check/include/ </div>
+<div class="line">　-D LIBCHECK_LIBRARY=/usr/local/check/lib/libcheck.0.dylib </div>
+<div class="line">　-D OPENSSL_ROOT_DIR=/usr/local/libressl/ </div>
+<div class="line">　-D OPENSSL_CRYPTO_LIBRARY=/usr/local/libressl/lib/libcrypto.50.dylib </div>
+<div class="line">　-D OPENSSL_SSL_LIBRARY=/usr/local/libressl/lib/libssl.53.dylib </div>
+<div class="line">　-D PCRE2_LIBRARY=/usr/local/pcre2/lib/libpcre2-8.0.dylib </div>
+<div class="line">　-D PCRE2_INCLUDE_DIR=/usr/local/pcre2/include/ </div>
+<div class="line">　-D JSONC_LIBRARY=/usr/local/json-c/lib/libjson-c.5.dylib </div>
+<div class="line">　-D JSONC_INCLUDE_DIR=/usr/local/json-c/include/json-c/ </div>
+<div class="line">　..</div>
+</div>
+<p><em>８－３．先の操作でキチンと設定できたか確認する</em></p>
+<div class="line-block">
+<div class="line">　下記のように出力されればOK</div>
+<div class="line">　-- Configuring done</div>
+<div class="line">　-- Generating done</div>
+<div class="line">　-- Build files have been written to: /Users/xxx/clamav-1.0.0-rc2/build</div>
+</div>
+<p><em>８－４．コンパイルしてテストする</em></p>
+<div class="line-block">
+<div class="line">　make &amp;&amp; sudo make test</div>
+</div>
+<p><em>８－５．テスト結果を確認する</em></p>
+<div class="line-block">
+<div class="line">　下記のように出力されればOK</div>
+<div class="line">　 ※ あくまでイメージなので、「tests passed」となっているかがカギ。</div>
+<div class="line">　Running tests...</div>
+<div class="line">　Test project /Users/xxx/Desktop/clamav-1.0.0-rc2/build</div>
+<div class="line">　Start 1: libclamav</div>
+<div class="line">　1/6 Test #1: libclamav ........................   Passed   15.46 sec</div>
+<div class="line">　Start 2: libclamav_rust</div>
+<div class="line">　2/6 Test #2: libclamav_rust ...................   Passed    8.89 sec</div>
+<div class="line">　Start 3: clamscan</div>
+<div class="line">　3/6 Test #3: clamscan .........................   Passed    0.13 sec</div>
+<div class="line">　Start 4: clamd</div>
+<div class="line">　4/6 Test #4: clamd ............................   Passed   12.53 sec</div>
+<div class="line">　Start 5: freshclam</div>
+<div class="line">　5/6 Test #5: freshclam ........................   Passed   27.33 sec</div>
+<div class="line">　Start 6: sigtool</div>
+<div class="line">　6/6 Test #6: sigtool ..........................   Passed    0.46 sec</div>
+<div class="line">　100% tests passed, 0 tests failed out of 6</div>
+<div class="line"><br /></div>
+<div class="line">　Total Test time (real) =  64.81 sec</div>
+</div>
+<p><em>８－６．ClamAVをインストールする</em></p>
+<div class="line-block">
+<div class="line">　sudo make install</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/hoge3/act08.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+    
+    
+        <div class="sidebar-toggle-group no-js">
+            
+            <button class="sidebar-toggle" id="sidebar-hide" title="Hide the sidebar menu">
+                 «
+                <span class="show-for-small">hide menu</span>
+                
+            </button>
+            <button class="sidebar-toggle" id="sidebar-show" title="Show the sidebar menu">
+                
+                <span class="show-for-small">menu</span>
+                <span class="hide-for-small">sidebar</span>
+                 »
+            </button>
+        </div>
+    
+      <div class="clearer"></div>
+    </div>
+    <div class="relbar-bottom">
+        
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+    <li><a href="../index.html">clamAV-for-mac 0.1.0 documentation</a> &#187;</li>
+
+        <li class="nav-item nav-item-this"><a href=""><strong>MacユーザーのためのClamAV導入-8</strong></a></li> 
+      </ul>
+    </div>
+    </div>
+
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, super-ueda.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+    <!-- cloud_sptheme 1.4 -->
+  </body>
+</html>
