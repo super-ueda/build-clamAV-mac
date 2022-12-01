@@ -7,7 +7,7 @@ Welcome to clamAV-for-mac's documentation!
 ==========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
    :caption: Contents:
 
    /hoge3/act01
@@ -21,7 +21,7 @@ Welcome to clamAV-for-mac's documentation!
    /hoge3/source
 
 
-Indices and tables
+Indexs and tables
 ==================
 
 * :ref:`genindex`
