@@ -22,7 +22,7 @@ Welcome to clamAV-for-mac's documentation!
    /hoge3/source
 
 
-Indices and tables
+Indexes and tables
 ==================
 
 * :ref:`genindex`
